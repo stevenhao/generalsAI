@@ -10,10 +10,20 @@ var DummyAI = (function() {
   // -1: uncaptured stuff
   // 0: your stuff
 
+  var generals = null;
+
   // 1) find any shortest path between square with >1 army and square not occupied with 0 army count
   // 2) move that square in that direction
   function step(game, ctrl) {
     console.log('stepping. gamestate = ', game);
+    if (generals == null) {
+      generals = game.generals;
+    }
+    game.generals.forEach(function(x, i) {
+      if (x != -1) {
+        generals[i] = x;
+      }
+    });
     var best_path = null;
     for (var i = 0; i < game.grid.length; ++i) {
       if (game.grid[i].color == -1 && game.grid[i].army == 0) {
