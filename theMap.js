@@ -119,10 +119,18 @@ function makeMap(p, w, h) {
   var turn = 0;
   function step() {
     turn += 1;
-    if (turn % 2 == 0) {
+    if (turn % 2 === 0) {
       // grow generals
       generals.forEach(idx => {
         tiles[idx].army += 1;
+      });
+    }
+    if (turn % 50 === 0) {
+      // grow everyone
+      tiles.forEach((tile, idx) => {
+        if (tile.color >= 0) {
+          tiles[idx].army += 1;
+        }
       });
     }
   }

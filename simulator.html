@@ -1,13 +1,38 @@
 <script src='./constants.js'></script>
 <script src='./theMap.js'></script>
-<script src='./ai.js'></script>
+<link rel="stylesheet" href="./simulator.css">
+
+<!-- put ai's here -->
+<script src='./stevenbot.js'></script>
+<script src='./dummy.js'></script>
+
 <script src='./simulator.js'></script>
 
-
 <body style='background-color:black;color:white'>
+  <div>Matchup:
+    <div style='display:inline-block' id='bot-selector'></div>
+  </div>
+  <p>
   <button onclick=step()>Step</button>
-  <button onclick=autoplay()>Autoplay</button>
-  <button onclick=pause()>Pause</button>
+
+  <!-- some vanilla js button hiding/showing -->
+  <button id='start' onclick=btnA.hidden=true;btnB.hidden=false;autoplay()>Start</button>
+  <button hidden id='stop' onclick=btnA.hidden=false;btnB.hidden=true;pause()>Stop</button>
+  <script>
+    btnA = document.getElementById('start');
+    btnB = document.getElementById('stop');
+  </script>
+
+  <select id='speed' onchange=setSpeed(document.getElementById('speed').value)>
+    <option disabled>Autoplay speed</option>
+    <option value="0.5">0.5x</option>
+    <option value="1">1x</option>
+    <option value="2">2x</option>
+    <option value="5">5x</option>
+    <option value="10">10x</option>
+  </select>
+
+  <button style='font-size:7pt' onclick=reset();draw();>Reset</button>
 <p>
 
 <div id='game'>

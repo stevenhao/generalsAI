@@ -1,0 +1,47 @@
+#grid {
+  position:relative;
+  margin: 10 10 10 10;
+  text-align:center;
+}
+
+.square {
+  border:1px solid black;
+  position:absolute;
+  vertical-align:middle;
+  color:white;
+  background-blend-mode: multiply;
+  background-position:center;
+  background-repeat:no-repeat;
+  background-size:25px 25px;
+}
+
+.army-text {
+  position:absolute;
+  transform:translateY(-50%);
+  top:50%;
+  width:100%;
+  font-family:Andale Mono;
+}
+
+
+/* css taken from https://codepen.io/ericrasch/pen/zjDBx */
+select {
+   -webkit-appearance: button;
+   -webkit-border-radius: 2px;
+   -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+   -webkit-padding-end: 20px;
+   -webkit-padding-start: 2px;
+   -webkit-user-select: none;
+   background-image: url(http://i62.tinypic.com/15xvbd5.png), -webkit-linear-gradient(#FAFAFA, #F4F4F4 40%, #E5E5E5);
+   background-position: 97% center;
+   background-repeat: no-repeat;
+   border: 1px solid #AAA;
+   color: #555;
+   font-size: 12px;
+   margin: 5px;
+   overflow: hidden;
+   padding: 2px 2px;
+   text-overflow: ellipsis;
+   white-space: nowrap;
+   width: 100px;
+}

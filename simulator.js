@@ -1,25 +1,103 @@
-var numPlayers = 1;
+// bot loading
+
+// be careful not to name these DummyBot, StevenBot, etc.
+// those will be the names of the actual bot constructors
+var Dummy = { name: 'DummyBot', path: './dummy.js' };
+var Steven = { name: 'StevenBot', path: './stevenbot.js' };
+
+var botSources = [Dummy, Steven];
+
+function load({name, path}) {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src = path;
+  document.head.appendChild(script);
+}
+
+function reloadBots() { // called when you update a source file, e.g.
+  botSources.forEach(load);
+}
+reloadBots();
+
+// "global" configs
+var botPlayers = [Dummy, Steven]; // default matchup: Dummy v Steven
+var numPlayers = 2;
 var w = 10;
 var h = 10;
-var bots = [];
+var delay = 10;
 
-var theMap = makeMap(numPlayers, w, h); // from generals-map.js
-bots[0] = DummyAI;
+function setSpeed(speed) {
+  speed = parseFloat(speed);
+  delay = 10 / speed; // max speed: 10
+}
+
+function makeBotSelectElement(defaultValue, onselect) {
+  var select = document.createElement('select');
+  botSources.forEach((bot, idx) => {
+    var option = document.createElement('option');
+    if (bot === defaultValue) {
+      option.selected = true;
+    }
+    option.value = idx;
+    option.innerHTML = bot.name;
+    select.appendChild(option);
+  });
+  select.onchange = () => onselect(botSources[parseInt(select.value)]);
+  return select;
+}
+
+function drawBotSelector() {
+  var botSelector = document.getElementById('bot-selector');
+  botSelector.innerHTML = '';
+  botPlayers.forEach((currentPlayer, idx) => {
+    var select = makeBotSelectElement(currentPlayer, bot => {
+      botPlayers[idx] = bot;
+    });
+    var hintOption = document.createElement('option');
+    hintOption.innerHTML = 'Select Player ' + (idx + 1);
+    hintOption.disabled = true;
+    select.insertBefore(hintOption, select.childNodes[0]);
+    botSelector.appendChild(select);
+  });
+}
+
+// "local" vars, i.e. they are reset each game
+var players;
+var theMap;
+function reset() {
+  theMap = makeMap(numPlayers, w, h); // from generals-map.js
+  players = botPlayers.map(fn => window[fn.name](numPlayers, w, h)); // instantiate each bot
+}
+reset();
+
+var currentDelay = 10;
 
 function step() {
   theMap.step();
   draw();
   for (var i = 0; i < numPlayers; i += 1) {
-    if (bots[i]) {
-      bots[i].step(theMap.vision(i), theMap.controls(i));
+    if (players[i]) {
+      players[i].step(theMap.vision(i), theMap.controls(i));
+    } else {
+      // no op bot will not do anything this turn
     }
+  }
+}
+
+function preStep() {
+  if (currentDelay > delay) currentDelay = delay; // just changed the speed. let's not keep anyone waiting
+  if (currentDelay === 0) {
+    step();
+    currentDelay = delay;
+  } else {
+    currentDelay -= 1;
   }
 }
 
 var autoplayIntvl = 0;
 function autoplay() {
   if (autoplayIntvl === 0) {
-    autoplayIntvl = setInterval(step, 500);
+    autoplayIntvl = setInterval(preStep, 25);
   }
 }
 
@@ -36,14 +114,13 @@ var colors = {
 
 function draw() {
   document.getElementById('turn').innerHTML = theMap.turn();
-  if (!document.getElementById('grid')) {
+  if (!document.getElementById('grid')) { // redraw grid as necessary
     var grid = document.createElement('div');
     grid.id = 'grid';
-    grid.style.cssText = 'position:relative;margin: 10 10 10 10;text-align:center;';
     theMap.tiles.forEach((tile, idx) => {
       var r = Math.floor(idx / theMap.width()), c = idx % theMap.width();
       var sq = document.createElement('div');
-      sq.style.cssText = 'border: 1px solid black;position:absolute;vertical-align:middle;color:white;background-blend-mode: multiply;background-position:center;background-repeat:no-repeat;background-size:25px 25px';
+      sq.className = 'square';
       sq.style.width = 30 + 'px';
       sq.style.height = 30 + 'px';
       sq.style.left = c * 30 + 'px';
@@ -60,14 +137,21 @@ function draw() {
     var cell = grid.childNodes[idx];
     cell.style.backgroundColor = colors[tile.color];
     if (tile.army) {
-      cell.innerHTML = '<div style="position:absolute;transform:translateY(-50%);top:50%;width:100%;font-family:Andale Mono">'+tile.army+'</div>';
+      cell.innerHTML = '<div class="army-text">'+tile.army+'</div>';
+    } else {
+      cell.innerHTML = '';
     }
     if (theMap.generals.indexOf(idx) !== -1) {
       cell.style.backgroundImage = 'url(images/crown.png)';
     } else if (tile.color === TILE_MOUNTAIN) {
       cell.style.backgroundImage = 'url(images/mountain.png)';
+    } else {
+      cell.style.backgroundImage = '';
     }
   });
 }
 
-window.onload = draw;
+window.onload = () => {
+  drawBotSelector()
+  draw();
+}
