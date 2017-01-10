@@ -18,11 +18,14 @@ function step() {
 
 var autoplayIntvl = 0;
 function autoplay() {
-  autoplayIntvl = setInterval(step, 500);
+  if (autoplayIntvl === 0) {
+    autoplayIntvl = setInterval(step, 500);
+  }
 }
 
 function pause() {
   clearInterval(autoplayIntvl);
+  autoplayIntvl = 0;
 }
 
 var colors = {
