@@ -1,7 +1,28 @@
+@font-face{
+  font-family:Quicksand;
+  src:url('./Quicksand-Regular.otf')
+}
+
+body {
+  font-family: Quicksand;
+}
+
 #grid {
   position:relative;
+  float: left;
   margin: 10 10 10 10;
   text-align:center;
+}
+
+#leaderboard {
+  float: left;
+  margin: 10 10 10 10;
+  background-color: black;
+  border-collapse: separate;
+}
+#leaderboard td {
+  background: white;
+  color: black;
 }
 
 .square {
@@ -20,7 +41,6 @@
   transform:translateY(-50%);
   top:50%;
   width:100%;
-  font-family:Andale Mono;
 }
 
 

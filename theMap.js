@@ -148,3 +148,14 @@ function makeMap(p, w, h) {
   return theMap;
 }
 
+function totalArmy(map, player) {
+  var sum = 0;
+  map.tiles.filter(tile => tile.color === player).forEach(tile => {
+    sum += tile.army;
+  });
+  return sum;
+}
+
+function totalLand(map, player) {
+  return map.tiles.filter(tile => tile.color === player).length;
+}

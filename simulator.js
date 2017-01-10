@@ -65,6 +65,12 @@ function drawBotSelector() {
 var players;
 var theMap;
 function reset() {
+  if (document.getElementById('grid') !== null) {
+    document.getElementById('grid').remove();
+  }
+  if (document.getElementById('leaderboard') !== null) {
+    document.getElementById('leaderboard').remove();
+  }
   theMap = makeMap(numPlayers, w, h); // from generals-map.js
   players = botPlayers.map(fn => window[fn.name](numPlayers, w, h)); // instantiate each bot
 }
@@ -149,6 +155,29 @@ function draw() {
       cell.style.backgroundImage = '';
     }
   });
+
+  var leaderboard = document.getElementById('leaderboard');
+  if (leaderboard === null) {
+    leaderboard = document.createElement('table');
+    leaderboard.id = 'leaderboard';
+    document.getElementById('game').appendChild(leaderboard);
+  }
+
+  leaderboard.innerHTML = '';
+  function makeRow(strs) {
+     var row = document.createElement('tr');
+     row.innerHTML = strs.map(s => '<td>' + s + '</td>').join('');
+    return row;
+  }
+  leaderboard.appendChild(makeRow(['Player', 'Army', 'Land']));
+  players.forEach((player, idx) => {
+    var row = makeRow([player.name,
+      totalArmy(theMap, idx), totalLand(theMap, idx)]);
+    row.childNodes[0].style.background = colors[idx];
+    row.childNodes[0].style.color = 'white';
+    leaderboard.appendChild(row);
+  });
+
 }
 
 window.onload = () => {
