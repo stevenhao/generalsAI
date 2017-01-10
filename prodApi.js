@@ -1,3 +1,6 @@
+// This is the bridge between our AI code and the generals.io website
+// Requires a modified version of the generals.io javascript.
+// see the Experimental Features section of the readme at https://github.com/stevenhao/generals for setup instructions
 function getGameState() {
   if (window.GameMap) {
     var theMap = GameMap.props.map;
