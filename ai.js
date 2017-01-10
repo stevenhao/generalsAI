@@ -19,20 +19,20 @@ var DummyAI = (function() {
     if (generals == null) {
       generals = game.generals;
     }
-    game.generals.forEach(function(x, i) {
+    game.generals.forEach((x, i) => {
       if (x != -1) {
         generals[i] = x;
       }
     });
     var best_path = null;
-    for (var i = 0; i < game.grid.length; ++i) {
+    game.grid.forEach((x, i) => {
       if (game.grid[i].color == -1 && game.grid[i].army == 0) {
         var path = getShortestPath(i, game);
         if (path !== null && (best_path == null || path.length < best_path.length)) {
           best_path = path;
         }
       }
-    }
+    });
     if (best_path != null) {
       ctrl.move(best_path[0], best_path[1]);
     }
@@ -72,7 +72,7 @@ var DummyAI = (function() {
         }
         return ans;
       }
-      getNeighbors(cur, game).forEach(function (neigh) {
+      getNeighbors(cur, game).forEach((neigh) => {
         if (game.grid[neigh].color == game.me && !(neigh in prev)) {
           queue.push(neigh);
           prev[neigh] = cur;
