@@ -1,4 +1,3 @@
-
 function getGameState() {
   if (window.GameMap) {
     var theMap = GameMap.props.map;
@@ -40,7 +39,7 @@ function autoplay(bot) {
   intvl = setInterval(() => {
     var game = getGameState();
     bot.step(game, ctrl);
-  }, 1000);
+  }, 500);
 }
 
 function pause() {
@@ -52,4 +51,4 @@ window.autoplay = autoplay;
 window.pause = pause;
 
 
-// autoplay(DummyAI())
+// autoplay(DummyAI)
