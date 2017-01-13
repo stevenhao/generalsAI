@@ -69,12 +69,19 @@ function makeMap(p, w, h) {
       }
     });
 
+    var generalsVision = generals.map(idx => {
+      if (grid[idx].color === TILE_FOG) {
+        return -1;
+      } else {
+        return idx;
+      }
+    });
     return {
       width: theMap.width(),
       height: theMap.height(),
       numberOfPlayers: generals.length,
       me: player,
-      generals: generals,
+      generals: generalsVision,
       grid: grid,
     }
   }

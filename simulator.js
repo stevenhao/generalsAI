@@ -20,11 +20,18 @@ function reloadBots() { // called when you update a source file, e.g.
 reloadBots();
 
 // "global" configs
-var botPlayers = [Dummy, Steven]; // default matchup: Dummy v Steven
-var numPlayers = 2;
-var w = 10;
-var h = 10;
+var botPlayers = [Steven];
+var numPlayers = 1;
+var w = 20;
+var h = 20;
 var delay = 10;
+
+function addBotPlayer() {
+  numPlayers += 1;
+  botPlayers.push(Dummy);
+  drawBotSelector();
+}
+
 
 function setSpeed(speed) {
   speed = parseFloat(speed);
