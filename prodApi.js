@@ -53,5 +53,10 @@ function pause() {
 window.autoplay = autoplay;
 window.pause = pause;
 
+function go(constructor) {
+  var game = getGameState();
+  autoplay(constructor(game.numPlayers, game.width, game.height));
+}
 
-// autoplay(DummyAI)
+window.go = go;
+// go(StevenBot)
