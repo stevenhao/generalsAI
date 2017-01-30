@@ -195,22 +195,25 @@ _decompress = function(e, n, r) {
 
 var fs = require('fs');
 var request = require('request');
-var async = require('async');
 
-var urls = fs.readFileSync('urls.txt').toString().split('\n');
+var data = [];
 
-var data = []
+var urls = fs.readFileSync('urls.txt').toString().split('\n').map((val) => {
+    return new Promise((resolve, reject) => {
+        request({
+            method: 'GET', url: 'http://www.generals.io/' + val + '.gior', encoding: null,
+        }, (err, response, body) => {
+            if (err) {
+                process.stdout.write('\n' + err + '\n');
+                return reject(err);
+            }
+            process.stdout.write('.');
+            resolve(data.push(deserialize(response.body)));
+        });
+    });
+})
 
-async.each(urls, (url, callback) => {
-    var requestSettings = {
-        method: 'GET',
-        url: 'https://www.generals.io/' + url + '.gior',
-        encoding: null,
-    };
-    request(requestSettings, (err, response, body) => {
-        console.log('pushed ' + url);
-        data.push(deserialize(response.body));
-    })
+Promise.all(urls).then(() => {
+    process.stdout.write('\nAll URLs processed.\n');
+    fs.writeFileSync('data.json', JSON.stringify(data, null, 4));
 });
-
-fs.writeFileSync('data.json', JSON.stringify(data, null, 4));

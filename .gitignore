@@ -1,2 +1,3 @@
 /data/*.json
-/data/__MACOSX
+__MACOSX
+node_modules
