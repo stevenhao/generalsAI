@@ -215,5 +215,5 @@ var urls = fs.readFileSync('urls.txt').toString().split('\n').map((val) => {
 
 Promise.all(urls).then(() => {
     process.stdout.write('\nAll URLs processed.\n');
-    fs.writeFileSync('data.json', JSON.stringify(data, null, 4));
+    fs.writeFileSync('data.json', JSON.stringify(data));
 });
